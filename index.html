@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OUTPOST 13: QAZAQ SPACE PROGRAM</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ============================================================
+         SCREEN 1: BOOT & LOADING SCREEN
+    ============================================================ -->
+    <div id="screen-loading" class="game-screen active">
+      <div class="loading-container">
+        <div class="loading-emblem"><img src="assets/emblem.svg" alt="Outpost 13 Crest" style="width:100%; height:100%; border-radius:50%;"></div>
+        <h1 class="loading-title">OUTPOST 13</h1>
+        <div class="loading-subtitle">QAZAQ SPACE PROGRAM • ТҰЛПАР-01</div>
+
+        <div class="terminal-log" id="bootTerminalLog">
+          [SYS_INIT] БАЙҚОҢЫР ҒАРЫШ АЙЛАҒЫ ТЕЛЕМЕТРИЯСЫ ҚОСЫЛДЫ...<br>
+          [ORBITAL] «СҰҢҚАР-X» РАКЕТА-ТАСЫҒЫШЫ ДАЙЫН.<br>
+          [CORE] БОРТТЫҚ ИИ «СҰҢҚАР-9» ЖҮЙЕСІ ЖҮКТЕЛУДЕ...<br>
+          [AUDIO] АКУСТИКАЛЫҚ ДАТЧИКТЕР БАПТАЛУДА...
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SCREEN 2: MAIN MENU
+    ============================================================ -->
+    <div id="screen-menu" class="game-screen">
+      <div class="menu-layout">
+        <div class="menu-header">
+          <div class="qazaq-solar-crest"><img src="assets/emblem.svg" alt="Outpost 13 Crest" style="width:110px; height:110px; filter: drop-shadow(0 0 15px rgba(0,240,255,0.6));"></div>
+          <h1 class="game-title">OUTPOST 13</h1>
+          <div class="game-title-sub">QAZAQ SPACE PROGRAM</div>
+          <p style="color:var(--text-muted); font-size:13px; margin-top:8px;">
+            Кооперативтік ғарыштық survival • Байқоңырдан Марсқа дейін
+          </p>
+        </div>
+
+        <div class="menu-nav-list">
+          <button class="menu-nav-btn" id="mainPlayBtn">
+            <span>🚀 КАМПАНИЯНЫ БАСТАУ (PLAY)</span>
+            <span class="hud-tag">30 КҮНДІК МИССИЯ</span>
+          </button>
+
+          <button class="menu-nav-btn" data-goto="screen-lobby">
+            <span>📡 МУЛЬТИПЛЕЕР ЛОББИ (MULTIPLAYER)</span>
+            <span class="badge-mini">2-6 ОЙЫНШЫ / ИИ</span>
+          </button>
+
+          <button class="menu-nav-btn" data-goto="screen-crew">
+            <span>🧑‍🚀 ЭКИПАЖ ДОСЬЕСІ (CREW DOSSIER)</span>
+            <span>6 МАМАН</span>
+          </button>
+
+          <button class="menu-nav-btn" data-goto="screen-lore">
+            <span>📜 АРХИВ ЖӘНЕ ЛОР (ARCHIVES & MYSTERY)</span>
+            <span style="color:var(--color-violet);">ҚОНАҚ • ӘЖЕ • ЖАЛМАУЫЗ</span>
+          </button>
+
+          <button class="menu-nav-btn" data-goto="screen-how-to-play">
+            <span>📖 ОЙЫН ЕРЕЖЕЛЕРІ (HOW TO PLAY)</span>
+            <span>НҰСҚАУЛЫҚ</span>
+          </button>
+        </div>
+
+        <div class="menu-footer">
+          <button id="soundToggleBtn" class="btn btn-sm btn-ghost" style="margin-bottom:12px;">🔊 ДЫБЫС: ҚОСУЛЫ</button><br>
+          KAZAKHSTAN AEROSPACE AGENCY • MARS EXPEDITION CORPS • VERSION 2.0 PROTO
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SCREEN 3: MULTIPLAYER LOBBY
+    ============================================================ -->
+    <div id="screen-lobby" class="game-screen">
+      <div class="lobby-header-bar">
+        <div>
+          <span class="hud-tag">БАЙҚОҢЫР БАЙЛАНЫС ОРТАЛЫҒЫ</span>
+          <h2 style="color:#fff; margin-top:4px;">Мультиплеер бөлмесі (Lobby)</h2>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px;">
+          <div class="room-code-badge" id="lobbyCodeDisplay">BAYK-77</div>
+          <button class="btn btn-sm btn-ghost" id="createRoomBtn">ЖАҢА КОД</button>
+        </div>
+      </div>
+
+      <div class="lobby-content-grid">
+        <div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+            <span id="lobbyCountTag" class="hud-tag">ЭКИПАЖ: 4 / 6 ОЙЫНШЫ</span>
+            <span style="font-size:12px; color:var(--text-muted);">Дайындық тексерісі белсенді</span>
+          </div>
+
+          <div class="lobby-player-list" id="lobbyPlayerList">
+            <!-- Rendered by game.js -->
+          </div>
+        </div>
+
+        <div class="lobby-sidebar-panel">
+          <h3 style="font-size:14px; font-family:var(--font-mono); color:var(--color-secondary);">БӨЛМЕГЕ ҚОСЫЛУ (JOIN)</h3>
+          <p style="font-size:12px; color:var(--text-muted);">Досыңыздың 7-таңбалы бөлме кодын енгізіңіз:</p>
+          <input type="text" id="roomCodeInput" class="sci-input" placeholder="Мысалы: TLPR-13">
+          <button class="btn btn-primary" id="joinRoomBtn">ҚОСЫЛУ (CONNECT)</button>
+
+          <hr style="border:0; border-top:1px solid var(--border-dim); margin:8px 0;">
+
+          <button class="btn btn-secondary" id="addBotBtn">+ ИИ-КӨМЕКШІ ҚОСУ (ADD BOT)</button>
+          <button class="btn btn-primary" data-goto="screen-character-select" style="margin-top:auto;">
+            КЕЛЕСІ: КЕЙІПКЕР ТАҢДАУ →
+          </button>
+          <button class="btn btn-ghost" data-goto="screen-menu">АРТҚА (МЕНЮ)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SCREEN 4: CHARACTER SELECTION (6 PROFILES)
+    ============================================================ -->
+    <div id="screen-character-select" class="game-screen">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <div>
+          <span class="hud-tag">ҒАРЫШКЕРЛЕР ТІЗІМІ</span>
+          <h2 style="color:#fff; margin-top:2px;">Экипаж мүшесін таңдаңыз (6 маман)</h2>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-primary" id="startMissionBtn">МИССИЯНЫ БАСТАУ (СТАРТ) →</button>
+          <button class="btn btn-ghost" data-goto="screen-menu">МЕНЮ</button>
+        </div>
+      </div>
+
+      <div class="character-select-layout">
+        <!-- 6 Character Cards Grid -->
+        <div class="character-roster-grid" id="characterRosterGrid">
+          <!-- Rendered dynamically by game.js -->
+        </div>
+
+        <!-- Detailed Dossier Panel for Selected Character -->
+        <div id="characterDetailPanel">
+          <!-- Rendered dynamically by game.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SCREEN 5: MISSION BRIEFING
+    ============================================================ -->
+    <div id="screen-briefing" class="game-screen">
+      <div class="briefing-box">
+        <div class="briefing-header">
+          <span class="hud-tag" id="briefingDayTag">КҮН 1 / 30</span>
+          <h1 id="briefingTitle" style="color:#fff; margin-top:6px;">Байқоңыр — Старт және Орбита</h1>
+          <div id="briefingLocationTag" style="font-family:var(--font-mono); font-size:12px; color:var(--color-primary); margin-top:4px;">
+            ОРНАЛАСҚАН ЖЕРІ: Байқоңыр ғарыш айлағы
+          </div>
+        </div>
+
+        <p class="briefing-desc" id="briefingDesc">
+          Подготовка ракеты-носителя «Сұңқар-X» и стыковка с судном TULPAR-01. Загрузка национальной провизии и проверка оборудования.
+        </p>
+
+        <div class="briefing-note" id="briefingNote">
+          «Запах степной полыни перед стартом, гул турбин, волнение экипажа.»
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:14px; margin-top:16px;">
+          <button class="btn btn-primary" onclick="window.game.startDay()">ПОСТҚА КІРУ (К ЗАДАЧАМ) →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SCREEN 6: MAIN GAMEPLAY HUB
+    ============================================================ -->
+    <div id="screen-gameplay" class="game-screen">
+      <div class="gameplay-layout">
+        <!-- Top Telemetry & Resource HUD -->
+        <div class="hud-telemetry-strip">
+          <div class="hud-location-meta">
+            <span class="hud-tag" id="hudDayCounter">КҮН 1 / 30</span>
+            <h3 id="hudLocationLabel">TULPAR-01 БАСҚАРУ ОРТАЛЫҒЫ</h3>
+          </div>
+
+          <!-- 7 Critical Resources -->
+          <div class="hud-resources-group">
+            <div class="res-meter-item" title="Кислород">
+              <div class="res-label-row"><span>O2 (АУА)</span><strong id="resVal_oxygen">85%</strong></div>
+              <div class="hud-res-track"><div id="resBar_oxygen" class="hud-res-fill" style="width:85%;"></div></div>
+            </div>
+
+            <div class="res-meter-item" title="Энергия">
+              <div class="res-label-row"><span>ЭНЕРГИЯ</span><strong id="resVal_energy">95%</strong></div>
+              <div class="hud-res-track"><div id="resBar_energy" class="hud-res-fill" style="width:95%;"></div></div>
+            </div>
+
+            <div class="res-meter-item" title="Еда (в т.ч. Қазы/Құрт)">
+              <div class="res-label-row"><span>ТАМАҚ</span><strong id="resVal_food">90%</strong></div>
+              <div class="hud-res-track"><div id="resBar_food" class="hud-res-fill" style="width:90%;"></div></div>
+            </div>
+
+            <div class="res-meter-item" title="Вода">
+              <div class="res-label-row"><span>СУ</span><strong id="resVal_water">80%</strong></div>
+              <div class="hud-res-track"><div id="resBar_water" class="hud-res-fill" style="width:80%;"></div></div>
+            </div>
+
+            <div class="res-meter-item" title="Топливо">
+              <div class="res-label-row"><span>ЖАНАРМАЙ</span><strong id="resVal_fuel">75%</strong></div>
+              <div class="hud-res-track"><div id="resBar_fuel" class="hud-res-fill" style="width:75%;"></div></div>
+            </div>
+
+            <div class="res-meter-item" title="Материалы">
+              <div class="res-label-row"><span>МАТЕРИАЛ</span><strong id="resVal_materials">60%</strong></div>
+              <div class="hud-res-track"><div id="resBar_materials" class="hud-res-fill" style="width:60%;"></div></div>
+            </div>
+
+            <div class="res-meter-item" title="Запчасти">
+              <div class="res-label-row"><span>БӨЛШЕКТЕР</span><strong id="resVal_spareParts">50%</strong></div>
+              <div class="hud-res-track"><div id="resBar_spareParts" class="hud-res-fill" style="width:50%;"></div></div>
+            </div>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="hud-quick-actions">
+            <button class="btn btn-sm btn-ghost" data-goto="screen-map">🗺️ КАРТА</button>
+            <button class="btn btn-sm btn-ghost" data-goto="screen-crew">👥 ЭКИПАЖ</button>
+            <button class="btn btn-sm btn-secondary" id="endDayBtn">🌙 КҮНДІ АЯҚТАУ (END DAY)</button>
+          </div>
+        </div>
+
+        <!-- Main Hub Split: Base Stations & Comms Panel -->
+        <div class="hub-main-grid">
+          <!-- Left: Base Modules & Interactive Stations -->
+          <div class="base-command-viewport">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="hud-tag">ИНТЕРАКТИВТІ СТАНЦИЯЛАР (ИНЖЕНЕРИЯ ЖӘНЕ ҒЫЛЫМ)</span>
+              <div style="display:flex; gap:12px; font-size:12px; font-family:var(--font-mono);">
+                <span>ЦЕЛОСТНОСТЬ: <strong id="hudBaseIntegrityVal" style="color:var(--color-success);">100%</strong></span>
+                <span>ДУХ ЭКИПАЖА: <strong id="hudMoraleVal" style="color:var(--color-primary);">90%</strong></span>
+              </div>
+            </div>
+
+            <div class="stations-grid">
+              <!-- Station 1: O2 Scrubber -->
+              <div class="base-station-card" data-task="oxygen_scrubber">
+                <div class="station-head">
+                  <span class="station-icon">🌱</span>
+                  <span class="station-status-chip">АКТИВЕН</span>
+                </div>
+                <div class="station-name">Отсек O2 «Сұңқар-Ауа»</div>
+                <div style="font-size:11px; color:var(--text-muted);">Калибровка синусоиды регенерации кислорода.</div>
+                <div class="station-action-hint">ТАПСЫРМАНЫ ОРЫНДАУ →</div>
+              </div>
+
+              <!-- Station 2: Power Grid -->
+              <div class="base-station-card" data-task="power_grid">
+                <div class="station-head">
+                  <span class="station-icon">⚡</span>
+                  <span class="station-status-chip">ОНЛАЙН</span>
+                </div>
+                <div class="station-name">Щит Реактора «Байқоңыр»</div>
+                <div style="font-size:11px; color:var(--text-muted);">Шунтирование высоковольтных цепей купола.</div>
+                <div class="station-action-hint">ТАПСЫРМАНЫ ОРЫНДАУ →</div>
+              </div>
+
+              <!-- Station 3: Radio Decoder -->
+              <div class="base-station-card" data-task="radio_signal">
+                <div class="station-head">
+                  <span class="station-icon">🛰️</span>
+                  <span class="station-status-chip" style="color:var(--color-violet);">СИГНАЛ 13.13</span>
+                </div>
+                <div class="station-name">Радиомачта «Алтын Таңдау»</div>
+                <div style="font-size:11px; color:var(--text-muted);">Поиск частот Байконура и голоса «ӘЖЕ».</div>
+                <div class="station-action-hint">ТАПСЫРМАНЫ ОРЫНДАУ →</div>
+              </div>
+
+              <!-- Station 4: Asar Valve -->
+              <div class="base-station-card" data-task="asar_sync">
+                <div class="station-head">
+                  <span class="station-icon">🤝</span>
+                  <span class="station-status-chip" style="color:var(--color-secondary);">АСАР МЕХАНИКАСЫ</span>
+                </div>
+                <div class="station-name">Атмосферный Шлюз «АСАР»</div>
+                <div style="font-size:11px; color:var(--text-muted);">Синхронная командная продувка с напарником.</div>
+                <div class="station-action-hint">БІРЛЕСІП ІСТЕУ →</div>
+              </div>
+
+              <!-- Station 5: Mars Rover / EVA -->
+              <div class="base-station-card" data-task="surface_rover">
+                <div class="station-head">
+                  <span class="station-icon">🚜</span>
+                  <span class="station-status-chip" style="color:var(--color-danger);">МАРС БЕТІ</span>
+                </div>
+                <div class="station-name">Ровер «Ақ Сұңқар» (EVA)</div>
+                <div style="font-size:11px; color:var(--text-muted);">Радарная вылазка за титаном, льдом и петроглифами.</div>
+                <div class="station-action-hint">БАРЛАУҒА ШЫҒУ →</div>
+              </div>
+
+              <!-- Station 6: Galley / Rations Synthesis -->
+              <div class="base-station-card" data-task="galley_rations">
+                <div class="station-head">
+                  <span class="station-icon">🥩</span>
+                  <span class="station-status-chip" style="color:var(--color-secondary);">ДАСТАРХАН</span>
+                </div>
+                <div class="station-name">Асхана: Қазы, Құрт, Қымыз</div>
+                <div style="font-size:11px; color:var(--text-muted);">Синтез традиционной казахской космической еды.</div>
+                <div class="station-action-hint">ДАЙЫНДАУ ЖӘНЕ ТАРАТУ →</div>
+              </div>
+            </div>
+
+            <!-- Crew Status Bar below stations -->
+            <div class="crew-hud-bar" id="crewHudBar">
+              <!-- Rendered by game.js -->
+            </div>
+          </div>
+
+          <!-- Right: Daily Task List & Live Intercom Chat -->
+          <div class="hub-comms-panel">
+            <!-- Active Tasks -->
+            <div class="tasks-box">
+              <div class="box-title">БҮГІНГІ ТАПСЫРМАЛАР (DAILY TASKS)</div>
+              <div class="task-list" id="dailyTaskList">
+                <!-- Rendered dynamically by game.js -->
+              </div>
+            </div>
+
+            <!-- Crew Intercom Chat -->
+            <div class="chat-box">
+              <div class="box-title">РАДИО-ИНТЕРКОМ (КОМАНДНЫЙ ЧАТ С ИИ)</div>
+              <div class="chat-log" id="intercomChatLog">
+                <!-- Chat messages rendered dynamically -->
+              </div>
+
+              <div class="chat-input-row">
+                <input type="text" id="intercomInput" class="sci-input" placeholder="Командаға хабарлама жазыңыз...">
+                <button class="btn btn-sm btn-primary" id="sendChatBtn">ЖІБЕРУ</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SCREEN 7: TACTICAL MAP & SCHEMATICS
+    ============================================================ -->
+    <div id="screen-map" class="game-screen">
+      <div id="tacticalMapWrapper">
+        <!-- Rendered by game.js -->
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SCREEN 8: CREW DOSSIER VIEW
+    ============================================================ -->
+    <div id="screen-crew" class="game-screen">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <div>
+          <span class="hud-tag">МЕДИЦИНАЛЫҚ ЖӘНЕ ПСИХОЛОГИЯЛЫҚ ДОСЬЕ</span>
+          <h2 style="color:#fff; margin-top:2px;">Экипаж жағдайы (Crew Status)</h2>
+        </div>
+        <button class="btn btn-ghost" data-goto="screen-gameplay">ПОСТҚА ОРАЛУ</button>
+      </div>
+
+      <div class="crew-full-list" id="crewFullDossierList">
+        <!-- Rendered by game.js -->
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SCREEN 9: LORE & ARCHIVES
+    ============================================================ -->
+    <div id="screen-lore" class="game-screen">
+      <div style="max-width:860px; margin:auto;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+          <div>
+            <span class="hud-tag">АРХИВ «БАЙҚОҢЫР-13»</span>
+            <h1 style="color:#fff; margin-top:4px;">Лор, Тарих және Құпиялар</h1>
+          </div>
+          <button class="btn btn-ghost" data-goto="screen-menu">МЕНЮГЕ ОРАЛУ</button>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:20px; font-size:14px; line-height:1.7;">
+          <div class="dossier-card">
+            <h3 style="color:var(--color-primary);">1. Тұлпар-01 және Байқоңыр ғарыш айлағы</h3>
+            <p>
+              Казахстанская космическая программа совершила квантовый скачок, модернизировав стартовый комплекс №1 («Гагаринский старт»). Корабль нового поколения <strong>TULPAR-01</strong> оснащен биметаллическим композитным корпусом и ионно-плазменной двигательной установкой «Сұңқар». Экипаж из 6 высококлассных специалистов отправился в кратер Ацидалия для закладки долговременной станции <strong>OUTPOST 13</strong>.
+            </p>
+          </div>
+
+          <div class="dossier-card" style="border-left:4px solid var(--color-violet);">
+            <h3 style="color:var(--color-violet);">2. Үш Құпия: ҚОНАҚ, ӘЖЕ және ЖАЛМАУЫЗ</h3>
+            <p>
+              <strong>ҚОНАҚ (Гость):</strong> Невидимое присутствие на борту корабля и в периметре станции. Проявляется при падении мощности ниже 30%. Оставляет иней и петроглифы архара. Не атакует, если экипаж проявляет древние обычаи уважения.<br><br>
+              <strong>ӘЖЕ (Бабушка):</strong> Таинственный радиосигнал на частоте 13.13 кГц. Нежный женский голос поет старинную колыбельную, предупреждая космонавтов об опасностях марсианских недр.<br><br>
+              <strong>ЖАЛМАУЫЗ (Пожиратель):</strong> Спящая гравитационно-электромагнитная аномалия под поверхностью Марса. Питается раздором и паникой экипажа. Победить её можно лишь слаженностью и принципом Асар!
+            </p>
+          </div>
+
+          <div class="dossier-card" style="border-left:4px solid var(--color-secondary);">
+            <h3 style="color:var(--color-secondary);">3. Қазақ дәстүрлері ғарышта: «АСАР» және Ұлттық Тағамдар</h3>
+            <p>
+              <strong>АСАР:</strong> Обычай бескорыстной совместной помощи. На станции OUTPOST 13 критические поломки шлюзов и реактора невозможно решить в одиночку — требуется синхронное действие двух и более специалистов.<br><br>
+              <strong>Космический Дастархан:</strong> Қазы (сытность и выносливость), Құрт (кальций и радиационная защита), Қымыз (нормализация нервной системы и иммунитет), Бауырсақ (боевой дух).
+            </p>
+          </div>
+
+          <div class="dossier-card" style="border-left:4px solid var(--color-primary);">
+            <h3 style="color:var(--color-primary);">4. Құпия Пасхалка: «АПА ЖІБЕРДІ»</h3>
+            <p>
+              Легенда гласит, что истинный хранитель миссии — дух Великой Степи. Если экипаж соберет древние петроглифы, угостит ҚОНАҚ свежим құртом и настроит антенну на 13.13 кГц, откроется сакральная концовка, где станцию окутает благословение предков!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SCREEN 10: HOW TO PLAY
+    ============================================================ -->
+    <div id="screen-how-to-play" class="game-screen">
+      <div style="max-width:860px; margin:auto;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+          <div>
+            <span class="hud-tag">ОЙЫН ЕРЕЖЕЛЕРІ</span>
+            <h1 style="color:#fff; margin-top:4px;">Инструкция по выживанию на OUTPOST 13</h1>
+          </div>
+          <button class="btn btn-ghost" data-goto="screen-menu">МЕНЮГЕ ОРАЛУ</button>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:16px; font-size:14px; line-height:1.6;">
+          <div class="dossier-card">
+            <h3 style="color:var(--color-secondary);">🔄 Игровой цикл 30 дней:</h3>
+            <ol style="margin-left:20px; margin-top:8px; display:flex; flex-direction:column; gap:6px;">
+              <li><strong>Брифинг:</strong> Узнайте статус миссии, текущую локацию (Байконур, Космос, Марс) и прогноз погоды.</li>
+              <li><strong>Выполнение заданий:</strong> Играйте в интерактивные мини-игры (ремонт O2, щит реактора, радиодешифратор, командный Асар).</li>
+              <li><strong>Менеджмент ресурсов:</strong> Следите, чтобы Кислород, Энергия, Еда и Вода не падали до нуля!</li>
+              <li><strong>Синтез еды:</strong> Готовьте Қазы и Құрт для восполнения здоровья и духа команды.</li>
+              <li><strong>Командное голосование:</strong> В конце дня принимайте коллективные решения экипажа при кризисах.</li>
+              <li><strong>Развязка:</strong> Доживите до 30 дня и откройте одну из 4 концовок!</li>
+            </ol>
+          </div>
+
+          <div class="dossier-card">
+            <h3 style="color:var(--color-primary);">🎮 Управление и Горячие Клавиши:</h3>
+            <p>Интерфейс оптимизирован под мышь и сенсорные экраны. В чате интеркома можно вводить фразы (например: «асар», «құрт», «қонақ»), и ИИ-коллеги ответят вам с учетом своего характера!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SCREEN 11: ENDING SCREEN
+    ============================================================ -->
+    <div id="screen-ending" class="game-screen">
+      <div class="ending-box" id="endingBox">
+        <div class="ending-badge-large" id="endingBadge">MISSION STATUS</div>
+        <h1 class="ending-title" id="endingTitle">КОНЕЦ МИССИИ</h1>
+        <p class="ending-desc" id="endingDesc">Результаты миссии рассчитываются...</p>
+
+        <div class="ending-stats-grid" id="endingStats">
+          <!-- Rendered by game.js -->
+        </div>
+
+        <div style="display:flex; gap:14px; margin-top:16px;">
+          <button class="btn btn-primary" onclick="window.game.restartGame()">ҚАЙТА ОЙНАУ (РЕСТАРТ)</button>
+          <button class="btn btn-ghost" onclick="window.game.switchScreen('screen-menu')">БАСТЫ МЕНЮ</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         MODAL 1: INTERACTIVE MINI-GAMES MODAL
+    ============================================================ -->
+    <div id="task-modal" class="modal-overlay hidden">
+      <div class="modal-window">
+        <div id="task-content">
+          <!-- Dynamically populated by minigames.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         MODAL 2: DAILY REPORT & VOTING MODAL
+    ============================================================ -->
+    <div id="daily-report-modal" class="modal-overlay hidden">
+      <div class="modal-window">
+        <div id="dailyReportContent">
+          <!-- Dynamically populated by game.js -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="audio.js"></script>
+  <script src="characters.js"></script>
+  <script src="campaign.js"></script>
+  <script src="minigames.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
