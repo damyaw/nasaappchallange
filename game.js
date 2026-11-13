@@ -1,4 +1,4 @@
-// OUTPOST 13: QAZAQ SPACE PROGRAM - CORE GAME ENGINE
+// OUTPOST 13: QAZAQ SPACE PROGRAM - CORE GAME ENGINE (ENGLISH)
 // Manages State, Campaign Flow, 30 Days Progression, AI Crew Simulation, Lobby & UI
 
 class OutpostGame {
@@ -27,16 +27,16 @@ class OutpostGame {
     this.baseIntegrity = 100;
     this.teamMorale = 90;
 
-    // Secret Easter Egg Progress («АПА ЖІБЕРДІ»)
-    this.secretEggProgress = 0; // Needs 3 to trigger secret ending!
+    // Secret Easter Egg Progress («APA ZHIBERDI»)
+    this.secretEggProgress = 0; // Needs 3 to trigger secret transcendence ending!
 
     // Simulated Crew (6 members)
     this.crew = JSON.parse(JSON.stringify(window.CREW_MEMBERS)).map(c => ({
       ...c,
       hp: 100,
       sanity: 90,
-      status: "Сапта (В строю)",
-      location: "Кают-компания"
+      status: "Active Duty",
+      location: "Mess Hall"
     }));
 
     // Lobby State
@@ -81,7 +81,7 @@ class OutpostGame {
     if (muteBtn) {
       muteBtn.addEventListener('click', () => {
         const muted = window.soundEngine.toggleMute();
-        muteBtn.innerText = muted ? "🔇 ДЫБЫС: ӨШІРУЛІ" : "🔊 ДЫБЫС: ҚОСУЛЫ";
+        muteBtn.innerText = muted ? "🔇 SOUND: MUTED" : "🔊 SOUND: ON";
       });
     }
 
@@ -196,7 +196,7 @@ class OutpostGame {
   finishBootSequence() {
     const bootLog = document.getElementById('bootTerminalLog');
     if (bootLog) {
-      bootLog.innerHTML += `<br><span style="color:#00ff88;">[OK] БОРТОВЫЕ СИСТЕМЫ ТҰЛПАР-01 ОНЛАЙН.</span><br><span style="color:#00f0ff;">[OK] ТЕЛЕМЕТРИЯ БАЙҚОҢЫР ПОДТВЕРЖДЕНА.</span>`;
+      bootLog.innerHTML += `<br><span style="color:#00ff88;">[OK] TULPAR-01 SHIPBOARD FLIGHT SYSTEMS ONLINE.</span><br><span style="color:#00f0ff;">[OK] BAIKONUR TELEMETRY LINK CONFIRMED.</span>`;
     }
     setTimeout(() => {
       this.switchScreen('screen-menu');
@@ -209,7 +209,7 @@ class OutpostGame {
   setupLobby() {
     const chars = window.CREW_MEMBERS;
     this.lobbyPlayers = [
-      { name: "Сіз (Вы)", char: chars[0], isHost: true, isReady: true, ping: 12 },
+      { name: "You (Player)", char: chars[0], isHost: true, isReady: true, ping: 12 },
       { name: "Almas_Kz", char: chars[1], isHost: false, isReady: true, ping: 24 },
       { name: "Sanzhar_Space", char: chars[2], isHost: false, isReady: false, ping: 38 },
       { name: "Aigerim_Astro", char: chars[3], isHost: false, isReady: true, ping: 19 }
@@ -253,7 +253,7 @@ class OutpostGame {
           });
           this.renderLobby();
         } else {
-          alert("Лобби заполнено! Максимум 6 игроков.");
+          alert("Lobby is full! Maximum 6 crew members.");
         }
       };
     }
@@ -267,7 +267,7 @@ class OutpostGame {
     if (!listEl) return;
 
     listEl.innerHTML = '';
-    this.lobbyPlayers.forEach((p, idx) => {
+    this.lobbyPlayers.forEach((p) => {
       const card = document.createElement('div');
       card.className = 'lobby-player-slot';
       card.innerHTML = `
@@ -275,19 +275,19 @@ class OutpostGame {
           <span style="font-size:24px;">${p.char.avatarIcon}</span>
         </div>
         <div class="slot-info">
-          <div class="slot-name">${p.name} ${p.isHost ? '<span class="badge-mini">ХОСТ</span>' : ''}</div>
-          <div class="slot-char">${p.char.nameKz} • ${p.char.role}</div>
+          <div class="slot-name">${p.name} ${p.isHost ? '<span class="badge-mini">HOST</span>' : ''}</div>
+          <div class="slot-char">${p.char.name} • ${p.char.role}</div>
           <div class="slot-ping">PING: ${p.ping}ms</div>
         </div>
         <div class="slot-status ${p.isReady ? 'ready' : 'waiting'}">
-          ${p.isReady ? 'ДАЙЫН (READY)' : 'КҮТУДЕ (WAITING)'}
+          ${p.isReady ? 'READY' : 'WAITING'}
         </div>
       `;
       listEl.appendChild(card);
     });
 
     const countEl = document.getElementById('lobbyCountTag');
-    if (countEl) countEl.innerText = `ЭКИПАЖ: ${this.lobbyPlayers.length} / 6 ОЙЫНШЫ`;
+    if (countEl) countEl.innerText = `CREW: ${this.lobbyPlayers.length} / 6 ASTRONAUTS`;
   }
 
   // ==========================================
@@ -310,37 +310,36 @@ class OutpostGame {
       card.innerHTML = `
         <div class="char-card-header">
           <span class="char-badge" style="color:${c.color}">${c.badge}</span>
-          <span class="char-age">${c.age} ЖАСТА</span>
+          <span class="char-age">${c.age} YEARS</span>
         </div>
         <div class="char-avatar-hero">
           <span class="hero-icon">${c.avatarIcon}</span>
-          <div class="char-name-kz">${c.nameKz}</div>
-          <div class="char-name-en">${c.name}</div>
-          <div class="char-role" style="color:${c.color}">${c.role}</div>
+          <div class="char-name-kz">${c.name}</div>
+          <div class="char-name-en" style="color:${c.color}">${c.role}</div>
         </div>
 
         <div class="char-snippet">
           <div class="snippet-item">
-            <strong>Қабілет:</strong> ${c.ability.name}
+            <strong>Ability:</strong> ${c.ability.name}
           </div>
           <div class="snippet-item">
-            <strong>Ерекшелік:</strong> ${c.healthQuirk.title}
+            <strong>Trait:</strong> ${c.healthQuirk.title}
           </div>
         </div>
 
         <div class="char-stats-mini">
           <div class="stat-bar-row">
-            <span>Шеберлік:</span>
+            <span>Skill:</span>
             <div class="stat-track"><div class="stat-fill" style="width:${c.stats.engineering}%; background:${c.color}"></div></div>
           </div>
           <div class="stat-bar-row">
-            <span>Төзімділік:</span>
+            <span>Stamina:</span>
             <div class="stat-track"><div class="stat-fill" style="width:${c.stats.stamina}%; background:${c.color}"></div></div>
           </div>
         </div>
 
         <div class="char-select-status">
-          ${c.id === this.selectedCharacterId ? '✓ ТАҢДАЛДЫ (ВЫБРАН)' : 'ТАҢДАУ (ВЫБРАТЬ)'}
+          ${c.id === this.selectedCharacterId ? '✓ SELECTED' : 'SELECT'}
         </div>
       `;
       grid.appendChild(card);
@@ -363,21 +362,21 @@ class OutpostGame {
     detailEl.innerHTML = `
       <div class="dossier-card" style="border-top: 4px solid ${c.color}">
         <div class="dossier-head">
-          <h2 style="color:${c.color}; margin:0;">${c.nameKz} (${c.name})</h2>
+          <h2 style="color:${c.color}; margin:0;">${c.name} (${c.nameKz})</h2>
           <span class="hud-tag">${c.specialization}</span>
         </div>
         <p class="dossier-bio">${c.bio}</p>
 
         <div class="dossier-section">
-          <h4 style="color:#00f0ff;">УНИКАЛЬНАЯ СПОСОБНОСТЬ: ${c.ability.name}</h4>
+          <h4 style="color:#00f0ff;">UNIQUE ABILITY: ${c.ability.name}</h4>
           <p class="section-p">${c.ability.desc}</p>
         </div>
 
         <div class="dossier-section">
-          <h4 style="color:#ffd166;">БАЛАНСИРОВАННАЯ ОСОБЕННОСТЬ ЗДОРОВЬЯ: ${c.healthQuirk.title}</h4>
+          <h4 style="color:#ffd166;">BALANCED HEALTH TRAIT: ${c.healthQuirk.title}</h4>
           <ul class="health-quirk-list">
-            <li><span style="color:#00ff88;">[ПРЕИМУЩЕСТВО]:</span> ${c.healthQuirk.pro}</li>
-            <li><span style="color:#ef4444;">[ОГРАНИЧЕНИЕ]:</span> ${c.healthQuirk.con}</li>
+            <li><span style="color:#00ff88;">[ADVANTAGE]:</span> ${c.healthQuirk.pro}</li>
+            <li><span style="color:#ef4444;">[DRAWBACK]:</span> ${c.healthQuirk.con}</li>
           </ul>
         </div>
 
@@ -392,7 +391,6 @@ class OutpostGame {
   // BRIEFING SCREEN & CAMPAIGN LEVEL PROGRESS
   // ==========================================
   renderBriefing() {
-    // Determine level from day
     const lvl = window.CAMPAIGN_LEVELS.find(l => l.days.includes(this.day)) || window.CAMPAIGN_LEVELS[0];
     this.currentLevel = lvl.level;
 
@@ -402,9 +400,9 @@ class OutpostGame {
     const descEl = document.getElementById('briefingDesc');
     const noteEl = document.getElementById('briefingNote');
 
-    if (titleEl) titleEl.innerText = lvl.titleRu;
-    if (dayTag) dayTag.innerText = `КҮН ${this.day} / 30 (ДЕНЬ ${this.day})`;
-    if (locTag) locTag.innerText = `ОРНАЛАСҚАН ЖЕРІ: ${lvl.location}`;
+    if (titleEl) titleEl.innerText = lvl.titleEn;
+    if (dayTag) dayTag.innerText = `DAY ${this.day} / 30`;
+    if (locTag) locTag.innerText = `LOCATION: ${lvl.location}`;
     if (descEl) descEl.innerText = lvl.description;
     if (noteEl) noteEl.innerText = `«${lvl.ambianceNote}»`;
   }
@@ -418,20 +416,20 @@ class OutpostGame {
     this.generateDailyTasks();
     this.updateGameplayHud();
 
-    this.sendCrewChat("СҰҢҚАР-9 (ИИ)", `КҮН ${this.day} БАСТАЛДЫ. Барлық жүйелер тексерілуде. Тапсырмалар таратылды.`, false);
+    this.sendCrewChat("SUNGQAR-9 (AI)", `DAY ${this.day} INITIATED. All critical shipboard and habitat modules checked. Task roster assigned.`, false);
 
     // Initial greeting from selected character
     setTimeout(() => {
-      this.sendCrewChat(this.character.name, `Экипаж, жиналайық! Бүгінгі міндет — базаны тұрақты ұстау. Асарға дайын болыңыздар!`, false);
+      this.sendCrewChat(this.character.name, `Crew, assemble! Today's mission is stabilizing Outpost 13. Ready for Asar!`, false);
     }, 1000);
   }
 
   generateDailyTasks() {
     this.activeTasks = [
-      { id: "oxygen_scrubber", name: "Калибровка системы O2 «Сұңқар-Ауа»", station: "Life Support", done: false },
-      { id: "power_grid", name: "Шунтирование энергосети реактора", station: "Reactor Hub", done: false },
-      { id: "radio_signal", name: "Сканирование спектра и поиск сигналов", station: "Comms Tower", done: false },
-      { id: "asar_sync", name: "Командная продувка шлюза «АСАР»", station: "Airlock EVA", done: false }
+      { id: "oxygen_scrubber", name: "Calibrate 'Sungqar-Air' O2 Waveform", station: "Life Support", done: false },
+      { id: "power_grid", name: "Bypass Reactor Power Junction", station: "Reactor Hub", done: false },
+      { id: "radio_signal", name: "Scan Deep Spectrum & Decrypt Signals", station: "Comms Tower", done: false },
+      { id: "asar_sync", name: "Cooperative 'ASAR' Airlock Purge", station: "Airlock EVA", done: false }
     ];
     this.renderTaskList();
   }
@@ -451,7 +449,7 @@ class OutpostGame {
           <div class="task-sub">${task.station}</div>
         </div>
         <button class="btn btn-sm ${task.done ? 'btn-ghost' : 'btn-primary'} task-act-btn">
-          ${task.done ? 'ОРЫНДАЛДЫ' : 'ОРЫНДАУ'}
+          ${task.done ? 'COMPLETED' : 'EXECUTE'}
         </button>
       `;
 
@@ -483,23 +481,22 @@ class OutpostGame {
       }
     }
 
-    this.sendCrewChat("СҰҢҚАР-9 (ИИ)", result.desc || `Тапсырма орындалды: ${task ? task.name : taskId}`, false);
+    this.sendCrewChat("SUNGQAR-9 (AI)", result.desc || `Assignment fulfilled: ${task ? task.name : taskId}`, false);
     this.renderTaskList();
     this.updateGameplayHud();
 
     // Check if all daily tasks finished
     const allDone = this.activeTasks.every(t => t.done);
     if (allDone) {
-      this.sendCrewChat("СҰҢҚАР-9", `Бүгінгі барлық негізгі тапсырмалар аяқталды! Күнді аяқтауға (КЕЛЕСІ КҮН) дайынбыз.`, false);
+      this.sendCrewChat("SUNGQAR-9", `All primary assignments for today are finished! Ready to conclude day (NEXT DAY).`, false);
     }
   }
 
   updateGameplayHud() {
-    // Update Day & Location Tag
     const lvl = window.CAMPAIGN_LEVELS.find(l => l.days.includes(this.day)) || window.CAMPAIGN_LEVELS[0];
     const dayLabel = document.getElementById('hudDayCounter');
     const locLabel = document.getElementById('hudLocationLabel');
-    if (dayLabel) dayLabel.innerText = `КҮН ${this.day} / 30`;
+    if (dayLabel) dayLabel.innerText = `DAY ${this.day} / 30`;
     if (locLabel) locLabel.innerText = lvl.location;
 
     // Update Resource Bars
@@ -539,7 +536,7 @@ class OutpostGame {
       chip.innerHTML = `
         <span class="chip-avatar">${c.avatarIcon}</span>
         <div class="chip-meta">
-          <span class="chip-name">${c.nameKz.split(' ')[0]}</span>
+          <span class="chip-name">${c.name.split(' ')[0]}</span>
           <div class="chip-hp-track">
             <div class="chip-hp-fill" style="width:${c.hp}%; background:${c.color}"></div>
           </div>
@@ -572,27 +569,27 @@ class OutpostGame {
     const speaker = otherCrew[Math.floor(Math.random() * otherCrew.length)];
 
     const lower = playerText.toLowerCase();
-    let reply = `«Қабылданды. Жүйелерді тексеріп жатырмын.»`;
+    let reply = `«Acknowledged. Keeping diagnostics on my assigned sector.»`;
 
-    if (lower.includes("асар") || lower.includes("помощь") || lower.includes("көмек")) {
-      reply = `«Асар — біздің күшіміз! Бірге кез келген апатты жеңеміз!»`;
+    if (lower.includes("asar") || lower.includes("help") || lower.includes("together") || lower.includes("assist")) {
+      reply = `«ASAR is our strength! Together we can overcome any catastrophe!»`;
       window.soundEngine.playAsarSync();
-    } else if (lower.includes("құрт") || lower.includes("еда") || lower.includes("паек") || lower.includes("тамақ")) {
-      reply = `«Құрт пен Қазыны үнемдеңіздер, Марста одан артық қуат беретін ештеңе жоқ!»`;
-    } else if (lower.includes("қонақ") || lower.includes("әже") || lower.includes("сигнал") || lower.includes("страх")) {
-      reply = `«Сенсорлар тағы да қызық тербеліс көрсетіп тұр... Бірақ біз қорықпаймыз. Біз Байқоңырданбыз!»`;
+    } else if (lower.includes("qurt") || lower.includes("qazy") || lower.includes("food") || lower.includes("ration")) {
+      reply = `«Ration the Qazy and Qurt carefully — nothing gives better stamina out here on Mars!»`;
+    } else if (lower.includes("qonaq") || lower.includes("azhe") || lower.includes("signal") || lower.includes("ghost") || lower.includes("fear")) {
+      reply = `«Sensors are spiking again... But we stay resolute. We come from Baikonur!»`;
       window.soundEngine.playAnomalyWhisper();
     } else {
       const stock = [
-        `«Түсіндім, мен өз секторымды бақылауда ұстап отырмын.»`,
-        `«Қысым қалыпты. Тек сыртқы сенсорлар салқын тартады.»`,
-        `«Бүгінгі күнді де абыроймен аяқтаймыз, алаңдамаңыз!»`,
-        `«Радиотолқында тыныштық орнады. Бұл жақсы белгі.»`
+        `«Understood. Monitoring my assigned sector.»`,
+        `«Cabin pressure is nominal. Exterior sensors are reading extreme sub-zero.»`,
+        `«We will finish today's shift with honor, fear not!»`,
+        `«Radio frequencies are calm for now. That is a promising sign.»`
       ];
       reply = stock[Math.floor(Math.random() * stock.length)];
     }
 
-    this.sendCrewChat(speaker.nameKz, reply, false);
+    this.sendCrewChat(speaker.name, reply, false);
   }
 
   // ==========================================
@@ -636,46 +633,45 @@ class OutpostGame {
 
     modal.classList.remove('hidden');
 
-    // Find daily dilemma if exists
     const dilemma = window.DAILY_EVENTS.find(e => e.day === this.day) || {
       day: this.day,
-      title: `КҮНДЕГІ СИТУАЦИЯ (ДЕНЬ ${this.day}): Штатный мониторинг`,
-      desc: "Существенных аномалий не обнаружено. Команда завершила плановый цикл работ.",
+      title: `DAILY SITUATION (DAY ${this.day}): Routine Monitoring`,
+      desc: "No major external anomalies detected. Crew completed standard operational maintenance.",
       options: [
-        { text: "Направить резерв энергии на стабилизацию теплиц (+10 Еда)", gain: { food: 10 }, cost: { energy: 5 } },
-        { text: "Провести полную диагностику купола (+10 Целостность)", gain: { materials: 10 }, cost: { stamina: 10 } }
+        { text: "Direct auxiliary power reserve to greenhouse stabilization (+10 Food)", gain: { food: 10 }, cost: { energy: 5 } },
+        { text: "Perform comprehensive dome structural ultrasonic scan (+10 Materials)", gain: { materials: 10 }, cost: { stamina: 10 } }
       ]
     };
 
     content.innerHTML = `
       <div class="report-box">
         <div class="report-header">
-          <span class="hud-tag">ТҰЛПАР-01 / OUTPOST 13 ДНЕВНОЙ РАПОРТ</span>
-          <h2>ДЕНЬ ${this.day} ЗАВЕРШЕН</h2>
+          <span class="hud-tag">TULPAR-01 / OUTPOST 13 DAILY REPORT</span>
+          <h2>DAY ${this.day} CONCLUDED</h2>
         </div>
 
         <div class="report-summary-grid">
           <div class="summary-col">
-            <h4>БАЛАНС РЕСУРСОВ:</h4>
+            <h4>RESOURCE BALANCE:</h4>
             <ul>
-              <li>Кислород: <strong>${Math.round(this.resources.oxygen)}%</strong></li>
-              <li>Энергия: <strong>${Math.round(this.resources.energy)}%</strong></li>
-              <li>Провизия (в т.ч. Қазы/Құрт): <strong>${Math.round(this.resources.food)}%</strong></li>
-              <li>Вода: <strong>${Math.round(this.resources.water)}%</strong></li>
+              <li>Oxygen (O2): <strong>${Math.round(this.resources.oxygen)}%</strong></li>
+              <li>Energy (Grid): <strong>${Math.round(this.resources.energy)}%</strong></li>
+              <li>Food & Kazakh Rations: <strong>${Math.round(this.resources.food)}%</strong></li>
+              <li>Water: <strong>${Math.round(this.resources.water)}%</strong></li>
             </ul>
           </div>
           <div class="summary-col">
-            <h4>СТАТУС МИССИИ:</h4>
+            <h4>MISSION INTEGRITY:</h4>
             <ul>
-              <li>Целостность базы: <strong>${Math.round(this.baseIntegrity)}%</strong></li>
-              <li>Боевой дух экипажа: <strong>${Math.round(this.teamMorale)}%</strong></li>
-              <li>Сакральный прогресс («АПА»): <strong>${this.secretEggProgress} / 3</strong></li>
+              <li>Base Structural Integrity: <strong>${Math.round(this.baseIntegrity)}%</strong></li>
+              <li>Crew Morale & Sanity: <strong>${Math.round(this.teamMorale)}%</strong></li>
+              <li>Ancestral Clues ('APA'): <strong>${this.secretEggProgress} / 3</strong></li>
             </ul>
           </div>
         </div>
 
         <div class="dilemma-card">
-          <div class="dilemma-badge">ДАУЫС БЕРУ (КОМАНДНОЕ ГОЛОСОВАНИЕ ЭКИПАЖА)</div>
+          <div class="dilemma-badge">CREW VOTE (COLLECTIVE TEAM DECISION)</div>
           <h3 class="dilemma-title">${dilemma.title}</h3>
           <p class="dilemma-desc">${dilemma.desc}</p>
 
@@ -683,7 +679,7 @@ class OutpostGame {
             ${dilemma.options.map((opt, i) => `
               <div class="dilemma-opt-card" data-opt="${i}">
                 <div class="opt-text">${opt.text}</div>
-                <button class="btn btn-sm btn-primary vote-btn" data-opt="${i}">ГОЛОСОВАТЬ</button>
+                <button class="btn btn-sm btn-primary vote-btn" data-opt="${i}">CAST VOTE</button>
               </div>
             `).join('')}
           </div>
@@ -721,50 +717,50 @@ class OutpostGame {
     const isMarsBase = this.day >= 16;
     container.innerHTML = `
       <div class="tactical-hud-header">
-        <div class="hud-tag">${isMarsBase ? 'МАРСИАНСКАЯ БАЗА OUTPOST 13' : 'ИССЛЕДОВАТЕЛЬСКИЙ СУДНО TULPAR-01'}</div>
-        <h3>ИНТЕРАКТИВНАЯ ТАКТИЧЕСКАЯ СХЕМА МОДУЛЕЙ</h3>
+        <div class="hud-tag">${isMarsBase ? 'MARTIAN BASE OUTPOST 13' : 'RESEARCH CRUISER TULPAR-01'}</div>
+        <h3>INTERACTIVE TACTICAL MODULE SCHEMATICS</h3>
       </div>
 
       <div class="schematic-layout ${isMarsBase ? 'base-layout' : 'ship-layout'}">
         <div class="module-box mod-bridge" onclick="window.game.miniGames.openTask('radio_signal')">
           <span class="mod-icon">🛰️</span>
-          <div class="mod-label">КОМАНДНЫЙ МОСТИК / СВЯЗЬ</div>
-          <span class="mod-status ok">СТАТУС: ОНЛАЙН</span>
+          <div class="mod-label">COMMAND BRIDGE / COMMS ARRAY</div>
+          <span class="mod-status ok">STATUS: ONLINE</span>
         </div>
 
         <div class="module-box mod-reactor" onclick="window.game.miniGames.openTask('power_grid')">
           <span class="mod-icon">⚡</span>
-          <div class="mod-label">ТЕРМОЯДЕРНЫЙ РЕАКТОР</div>
-          <span class="mod-status ok">ТОК: СТАБИЛЕН</span>
+          <div class="mod-label">THERMONUCLEAR REACTOR</div>
+          <span class="mod-status ok">GRID: STABLE</span>
         </div>
 
         <div class="module-box mod-life" onclick="window.game.miniGames.openTask('oxygen_scrubber')">
           <span class="mod-icon">🌱</span>
-          <div class="mod-label">СИСТЕМА ЖИЗНЕОБЕСПЕЧЕНИЯ O2</div>
+          <div class="mod-label">LIFE SUPPORT O2 GENERATOR</div>
           <span class="mod-status ${this.resources.oxygen < 40 ? 'warn' : 'ok'}">O2: ${Math.round(this.resources.oxygen)}%</span>
         </div>
 
         <div class="module-box mod-galley" onclick="window.game.miniGames.openTask('galley_rations')">
           <span class="mod-icon">🥩</span>
-          <div class="mod-label">КАЮТ-КОМПАНИЯ / ПАЙКИ (ҚАЗЫ/ҚҰРТ)</div>
-          <span class="mod-status ok">ДАСТАРХАН: ТОЛЫ</span>
+          <div class="mod-label">MESS HALL / RATIONS (QAZY & QURT)</div>
+          <span class="mod-status ok">DASTARKHAN: STOCKED</span>
         </div>
 
         <div class="module-box mod-airlock" onclick="window.game.miniGames.openTask('asar_sync')">
           <span class="mod-icon">🚪</span>
-          <div class="mod-label">ШЛЮЗОВОЙ ОТСЕК «АСАР»</div>
-          <span class="mod-status ok">ШЛЮЗ ГЕРМЕТИЧЕН</span>
+          <div class="mod-label">ASAR COOPERATIVE AIRLOCK</div>
+          <span class="mod-status ok">HATCH: HERMETIC</span>
         </div>
 
         <div class="module-box mod-rover" onclick="window.game.miniGames.openTask('surface_rover')">
           <span class="mod-icon">🚜</span>
-          <div class="mod-label">РОТОРНЫЙ АНПОСТ / СЕНСОРЫ МАРСА</div>
-          <span class="mod-status ok">РАДАР: АКТИВЕН</span>
+          <div class="mod-label">ROVER BAY / MARS RADAR</div>
+          <span class="mod-status ok">SURVEY: ACTIVE</span>
         </div>
       </div>
 
       <div class="map-controls-row">
-        <button class="btn btn-primary" onclick="window.game.switchScreen('screen-gameplay')">ОРАЛУ (ВЕРНУТЬСЯ НА ПОСТ)</button>
+        <button class="btn btn-primary" onclick="window.game.switchScreen('screen-gameplay')">RETURN TO COMMAND POST</button>
       </div>
     `;
   }
@@ -785,12 +781,12 @@ class OutpostGame {
         <div class="dossier-row">
           <span class="dossier-avatar">${c.avatarIcon}</span>
           <div class="dossier-main-info">
-            <h3 style="color:${c.color}; margin:0;">${c.nameKz} (${c.name})</h3>
-            <div class="dossier-sub">${c.role} • ${c.age} жаста • ${c.specialization}</div>
+            <h3 style="color:${c.color}; margin:0;">${c.name} (${c.nameKz})</h3>
+            <div class="dossier-sub">${c.role} • Age ${c.age} • ${c.specialization}</div>
           </div>
           <div class="dossier-vitals">
             <span class="hud-tag" style="color:#00ff88;">HP: ${c.hp}%</span>
-            <span class="hud-tag" style="color:#00f0ff;">ДУХ: ${c.sanity}%</span>
+            <span class="hud-tag" style="color:#00f0ff;">SANITY: ${c.sanity}%</span>
           </div>
         </div>
 
@@ -798,11 +794,11 @@ class OutpostGame {
 
         <div class="dossier-specs-grid">
           <div class="spec-col">
-            <strong>Способность:</strong> ${c.ability.name}<br>
+            <strong>Unique Ability:</strong> ${c.ability.name}<br>
             <small>${c.ability.desc}</small>
           </div>
           <div class="spec-col">
-            <strong>Здоровье:</strong> ${c.healthQuirk.title}<br>
+            <strong>Health Trait:</strong> ${c.healthQuirk.title}<br>
             <small style="color:#00ff88;">+ ${c.healthQuirk.pro}</small><br>
             <small style="color:#ef4444;">- ${c.healthQuirk.con}</small>
           </div>
@@ -833,7 +829,7 @@ class OutpostGame {
     const statsEl = document.getElementById('endingStats');
 
     if (titleEl) {
-      titleEl.innerText = ending.titleRu;
+      titleEl.innerText = ending.titleEn;
       titleEl.style.color = ending.color;
     }
     if (badgeEl) {
@@ -843,11 +839,11 @@ class OutpostGame {
     if (descEl) descEl.innerText = ending.desc;
     if (statsEl) {
       statsEl.innerHTML = `
-        <div class="end-stat-col">Дней прожито: <strong>${this.day} / 30</strong></div>
-        <div class="end-stat-col">Кислород: <strong>${Math.round(this.resources.oxygen)}%</strong></div>
-        <div class="end-stat-col">Энергия: <strong>${Math.round(this.resources.energy)}%</strong></div>
-        <div class="end-stat-col">Мораль экипажа: <strong>${Math.round(this.teamMorale)}%</strong></div>
-        <div class="end-stat-col">Сакральные пасхалки: <strong>${this.secretEggProgress} / 3</strong></div>
+        <div class="end-stat-col">Days Survived: <strong>${this.day} / 30</strong></div>
+        <div class="end-stat-col">Oxygen Level: <strong>${Math.round(this.resources.oxygen)}%</strong></div>
+        <div class="end-stat-col">Grid Energy: <strong>${Math.round(this.resources.energy)}%</strong></div>
+        <div class="end-stat-col">Crew Morale: <strong>${Math.round(this.teamMorale)}%</strong></div>
+        <div class="end-stat-col">Sacred Clues Discovered: <strong>${this.secretEggProgress} / 3</strong></div>
       `;
     }
   }

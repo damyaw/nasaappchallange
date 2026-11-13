@@ -1,4 +1,4 @@
-// OUTPOST 13: QAZAQ SPACE PROGRAM - INTERACTIVE MINI-GAMES ENGINE
+// OUTPOST 13: QAZAQ SPACE PROGRAM - INTERACTIVE MINI-GAMES ENGINE (ENGLISH)
 // 6 Fully Playable Sci-Fi Engineering, Science & Cultural Tasks
 
 class MiniGameManager {
@@ -48,7 +48,7 @@ class MiniGameManager {
         this.renderGalleyRations(container);
         break;
       default:
-        container.innerHTML = `<p class="text-hazard">Белгісіз тапсырма / Неизвестная задача</p>`;
+        container.innerHTML = `<p class="text-hazard">Unknown Station Task / Offline</p>`;
     }
   }
 
@@ -58,37 +58,37 @@ class MiniGameManager {
   renderOxygenScrubber(container) {
     container.innerHTML = `
       <div class="task-header">
-        <div class="task-title-badge">ИНЖЕНЕРИЯ ЖӘНЕ ТЫНЫС АЛУ ЖҮЙЕСІ</div>
-        <h2 class="task-title">Регенерация отсека O2 «Сұңқар-Ауа»</h2>
-        <p class="task-desc">Выровняйте частоту, фазу и амплитуду очистителя кислорода с эталонной синусоидой реактора. Достигните 95%+ синхронизации.</p>
+        <div class="task-title-badge">LIFE SUPPORT / 'SUNGQAR-AIR' O2 SYSTEM</div>
+        <h2 class="task-title">Calibrate Oxygen Scrubber Waveform</h2>
+        <p class="task-desc">Align the frequency, phase shift, and amplitude of the scrubber unit to match the reactor's reference waveform. Reach 88%+ synchronization.</p>
       </div>
 
       <div class="oscilloscope-wrapper">
         <canvas id="scopeCanvas" width="620" height="220" class="hud-canvas"></canvas>
         <div class="scope-overlay">
           <span class="hud-tag">TARGET WAVE: 440 Hz</span>
-          <span id="syncRateDisplay" class="hud-sync-tag">СИНХРОНИЗАЦИЯ: 0%</span>
+          <span id="syncRateDisplay" class="hud-sync-tag">SYNCHRONIZATION: 0%</span>
         </div>
       </div>
 
       <div class="controls-grid">
         <div class="control-group">
-          <label>Жиілік (Частота): <span id="freqVal">300</span> Hz</label>
+          <label>Frequency (Жиілік): <span id="freqVal">300</span> Hz</label>
           <input type="range" id="freqSlider" min="200" max="600" value="300" class="sci-slider">
         </div>
         <div class="control-group">
-          <label>Фазалық ығысу (Фаза): <span id="phaseVal">0</span>°</label>
+          <label>Phase Shift (Фаза): <span id="phaseVal">0</span>°</label>
           <input type="range" id="phaseSlider" min="0" max="360" value="0" class="sci-slider">
         </div>
         <div class="control-group">
-          <label>Амплитуда (Күш): <span id="ampVal">40</span>%</label>
+          <label>Amplitude (Күш): <span id="ampVal">40</span>%</label>
           <input type="range" id="ampSlider" min="10" max="100" value="40" class="sci-slider">
         </div>
       </div>
 
       <div class="task-actions">
-        <button id="calibrateBtn" class="btn btn-primary">БЕКІТУ (КАЛИБРОВАТЬ)</button>
-        <button id="cancelTaskBtn" class="btn btn-ghost">ЖАБУ (ОТМЕНА)</button>
+        <button id="calibrateBtn" class="btn btn-primary">CALIBRATE (LOCK IN)</button>
+        <button id="cancelTaskBtn" class="btn btn-ghost">CLOSE (CANCEL)</button>
       </div>
     `;
 
@@ -103,9 +103,9 @@ class MiniGameManager {
 
     cancelBtn.onclick = () => this.closeModal();
 
-    let targetFreq = 440;
-    let targetPhase = 180;
-    let targetAmp = 75;
+    const targetFreq = 440;
+    const targetPhase = 180;
+    const targetAmp = 75;
 
     let time = 0;
     const draw = () => {
@@ -169,8 +169,8 @@ class MiniGameManager {
       const error = (freqDiff * 0.5) + (phaseDiff * 0.3) + (ampDiff * 0.2);
       const accuracy = Math.max(0, Math.min(100, Math.round((1 - error) * 100)));
 
-      syncDisplay.innerText = `СИНХРОНИЗАЦИЯ: ${accuracy}%`;
-      syncDisplay.style.color = accuracy >= 90 ? '#00ff88' : (accuracy >= 70 ? '#ffd166' : '#ef4444');
+      syncDisplay.innerText = `SYNCHRONIZATION: ${accuracy}%`;
+      syncDisplay.style.color = accuracy >= 88 ? '#00ff88' : (accuracy >= 65 ? '#ffd166' : '#ef4444');
 
       this.currentAccuracy = accuracy;
       requestAnimationFrame(draw);
@@ -183,12 +183,12 @@ class MiniGameManager {
         window.soundEngine.playSuccess();
         this.game.completeTask('oxygen_scrubber', {
           resourceDelta: { oxygen: +25, energy: -5 },
-          desc: "Система O2 очищена! Уровень кислорода восстановлен (+25 O2)."
+          desc: "O2 life-support scrubbed! Cabin oxygen levels replenished (+25% Oxygen)."
         });
         this.closeModal();
       } else {
         window.soundEngine.playError();
-        alert(`Синхронизация недостаточна (${this.currentAccuracy}%). Требуется минимум 88%!`);
+        alert(`Synchronization insufficient (${this.currentAccuracy}%). Minimum 88% alignment required!`);
       }
     };
   }
@@ -199,20 +199,20 @@ class MiniGameManager {
   renderPowerGrid(container) {
     container.innerHTML = `
       <div class="task-header">
-        <div class="task-title-badge">ИНЖЕНЕРИЯ / ЭНЕРГОСЕТЬ «БАЙҚОҢЫР-ТОК»</div>
-        <h2 class="task-title">Шунтирование распределительного щита</h2>
-        <p class="task-desc">Соедините главную шину термоядерного реактора со всеми 4 жизненно важными терминалами станции. Нажимайте на узлы, чтобы вращать их проводники.</p>
+        <div class="task-title-badge">ENGINEERING / 'BAIKONUR' POWER GRID</div>
+        <h2 class="task-title">Bypass Thermonuclear Junction Board</h2>
+        <p class="task-desc">Reroute high-voltage power conduits from the primary reactor core to all 4 critical station terminals. Click nodes to rotate their junctions.</p>
       </div>
 
       <div class="circuit-board" id="circuitGrid"></div>
 
       <div class="task-status-row">
-        <div id="circuitPowerStatus" class="hud-tag">ТОК В ЦЕПИ: 0 / 4 ПОДКЛЮЧЕНО</div>
+        <div id="circuitPowerStatus" class="hud-tag">CURRENT IN CIRCUIT: 0 / 4 TERMINALS CONNECTED</div>
       </div>
 
       <div class="task-actions">
-        <button id="testCircuitBtn" class="btn btn-primary">ТЕСТ ТОКА (ПУСК)</button>
-        <button id="cancelTaskBtn" class="btn btn-ghost">ЖАБУ (ОТМЕНА)</button>
+        <button id="testCircuitBtn" class="btn btn-primary">ENERGIZE GRID (TEST)</button>
+        <button id="cancelTaskBtn" class="btn btn-ghost">CLOSE (CANCEL)</button>
       </div>
     `;
 
@@ -243,13 +243,13 @@ class MiniGameManager {
 
     const renderNodes = () => {
       gridEl.innerHTML = '';
-      nodes.forEach((node, index) => {
+      nodes.forEach((node) => {
         const div = document.createElement('div');
         div.className = `circuit-cell ${node.type} ${node.connected ? 'powered' : ''}`;
         div.style.transform = `rotate(${node.rot}deg)`;
 
         let icon = '╋';
-        if (node.type === 'source') icon = '⚡ ЯДРО';
+        if (node.type === 'source') icon = '⚡ CORE';
         else if (node.type === 'term') icon = `🔌 ${node.label}`;
         else if (node.type === 'straight') icon = '┃';
         else if (node.type === 'corner') icon = '┗';
@@ -261,8 +261,7 @@ class MiniGameManager {
           div.onclick = () => {
             window.soundEngine.playClick();
             node.rot = (node.rot + 90) % 360;
-            // Check connections simply
-            if (Math.random() > 0.4 || node.rot % 180 === 0) {
+            if (Math.random() > 0.35 || node.rot % 180 === 0) {
               node.connected = true;
             }
             evaluateCircuit();
@@ -274,12 +273,11 @@ class MiniGameManager {
     };
 
     const evaluateCircuit = () => {
-      // Count connected terminals
       const terms = nodes.filter(n => n.type === 'term');
       solvedCount = terms.filter(t => t.connected || Math.random() > 0.5).length;
       const status = document.getElementById('circuitPowerStatus');
       if (status) {
-        status.innerText = `ТОК В ЦЕПИ: ${solvedCount} / 4 ПОДКЛЮЧЕНО`;
+        status.innerText = `CURRENT IN CIRCUIT: ${solvedCount} / 4 TERMINALS CONNECTED`;
         status.style.color = solvedCount >= 3 ? '#00ff88' : '#ffd166';
       }
     };
@@ -291,12 +289,12 @@ class MiniGameManager {
         window.soundEngine.playSuccess();
         this.game.completeTask('power_grid', {
           resourceDelta: { energy: +30, spareParts: -5 },
-          desc: "Энергосеть стабилизирована! Мощность реактора направлена на купол (+30 Энергии)."
+          desc: "Power grid stabilized! Reactor power routed safely to habitat dome (+30% Energy)."
         });
         this.closeModal();
       } else {
         window.soundEngine.playError();
-        alert("Короткое замыкание! Поверните узлы так, чтобы запитать терминалы!");
+        alert("Short circuit warning! Rotate conduit junctions to feed at least 3 terminal points!");
       }
     };
   }
@@ -307,9 +305,9 @@ class MiniGameManager {
   renderRadioSignal(container) {
     container.innerHTML = `
       <div class="task-header">
-        <div class="task-title-badge">РАДИОАСТРОНОМИЯ / «АЛТЫН ТАҢДАУ» СЕНСОРЛАРЫ</div>
-        <h2 class="task-title">Дешифровка глубокого марсианского спектра</h2>
-        <p class="task-desc">Управляйте частотным ползунком для обнаружения скрытого сигнала. Найдите пик резонанса на мистической частоте 13.13 кГц («ӘЖЕ») или 42.8 МГц («Байконур»).</p>
+        <div class="task-title-badge">RADIO ASTRONOMY / 'ALTYN TANGDAU' SENSOR MAST</div>
+        <h2 class="task-title">Deep Martian Spectrum Decryption</h2>
+        <p class="task-desc">Sweep the wideband receiver across frequencies to capture anomalies. Match resonance peaks at mystical frequency 13.13 kHz ('ÄZHE') or 42.8 MHz ('BAIKONUR').</p>
       </div>
 
       <div class="radio-tuner-box">
@@ -322,22 +320,22 @@ class MiniGameManager {
           <input type="range" id="radioSlider" min="1000" max="5000" value="1313" class="sci-slider">
           <div class="slider-marks">
             <span>10.0 kHz</span>
-            <span style="color:#ffd166;">★ 13.13 kHz (ӘЖЕ)</span>
+            <span style="color:#ffd166;">★ 13.13 kHz (ÄZHE)</span>
             <span>25.0 kHz</span>
-            <span style="color:#00f0ff;">▲ 42.8 MHz (БАЙҚОҢЫР)</span>
+            <span style="color:#00f0ff;">▲ 42.8 MHz (BAIKONUR)</span>
             <span>50.0 kHz</span>
           </div>
         </div>
 
         <div class="transcript-box" id="radioTranscript">
-          <div class="transcript-title">БОРТОВОЙ ЖУРНАЛ ДЕШИФРАТОРА:</div>
-          <div class="transcript-body" id="transcriptText">... [СТАТИЧЕСКИЙ ШУМ ВАКУУМА] ...</div>
+          <div class="transcript-title">SIGNAL DECRYPTION TERMINAL LOG:</div>
+          <div class="transcript-body" id="transcriptText">... [VACUUM BACKGROUND STATIC] ...</div>
         </div>
       </div>
 
       <div class="task-actions">
-        <button id="lockSignalBtn" class="btn btn-primary">СИГНАЛДЫ БЕКІТУ (ЗАХВАТ)</button>
-        <button id="cancelTaskBtn" class="btn btn-ghost">ЖАБУ (ОТМЕНА)</button>
+        <button id="lockSignalBtn" class="btn btn-primary">LOCK SIGNAL (CAPTURE)</button>
+        <button id="cancelTaskBtn" class="btn btn-ghost">CLOSE (CANCEL)</button>
       </div>
     `;
 
@@ -363,17 +361,17 @@ class MiniGameManager {
         isSecretFound = true;
         isBaikonurFound = false;
         window.soundEngine.playAnomalyWhisper();
-        transcript.innerHTML = `<span style="color:#00f0ff;">«...Балаларым... Құм астында мың жыл ұйықтадым... Даланың самалы мұнда да жетеді... Біз сендермен біргеміз...»</span> [ГОЛОС ӘЖЕ / ЧАСТОТА 13.13 кГц РАСШИФРОВАНА]`;
+        transcript.innerHTML = `<span style="color:#00f0ff;">«...My children... I have slept beneath these sands for a thousand years... The steppe wind reaches even here... We are with you...»</span> [VOICE OF ÄZHE / 13.13 kHz DECRYPTED]`;
       } else if (Math.abs(val - 4280) < 60) {
         // Baikonur frequency
         isBaikonurFound = true;
         isSecretFound = false;
         window.soundEngine.playRadioStatic(0.5);
-        transcript.innerHTML = `<span style="color:#00ff88;">«Байқоңыр Орталығы: "Тұлпар-01", сіздердің телеметрияңыз қабылданды. Барлық жүйе штаттық режимде. Сәттілік, қырандар!»</span> [ЦУП БАЙКОНУР]`;
+        transcript.innerHTML = `<span style="color:#00ff88;">«Baikonur Mission Control: "Tulpar-01", telemetry packet received. All orbital parameters nominal. Godspeed, eagles of Kazakhstan!»</span> [MISSION CONTROL BAIKONUR]`;
       } else {
         isSecretFound = false;
         isBaikonurFound = false;
-        transcript.innerHTML = `... [ШУМ: cos(ωt) + ШЫҢҒЫРҒАН ЖЕЛДІҢ ДАУСЫ] ...`;
+        transcript.innerHTML = `... [WHITE NOISE: cos(ωt) + WHISTLING MARTIAN WINDS] ...`;
       }
     };
 
@@ -404,64 +402,64 @@ class MiniGameManager {
         this.game.secretEggProgress++;
         this.game.completeTask('radio_signal', {
           resourceDelta: { morale: +35, energy: -5 },
-          desc: "Сакральный голос «ӘЖЕ» расшифрован! Мораль экипажа взлетела (+35 Мораль, раскрыта древняя тайна!)."
+          desc: "Sacred voice of 'ÄZHE' decrypted! Crew morale surged (+35% Morale, ancient secret unlocked!)."
         });
         this.closeModal();
       } else if (isBaikonurFound) {
         window.soundEngine.playSuccess();
         this.game.completeTask('radio_signal', {
           resourceDelta: { morale: +20, materials: +10 },
-          desc: "Канал с Байконуром восстановлен! Получены пакеты обновлений прошивки (+20 Мораль, +10 Материалы)."
+          desc: "Direct link to Baikonur restored! Received firmware patches (+20% Morale, +10 Materials)."
         });
         this.closeModal();
       } else {
         window.soundEngine.playError();
-        alert("Точная частота не захвачена! Подстройте бегунок к 13.13 кГц или 42.8 МГц.");
+        alert("Frequency not captured! Fine-tune the slider to 13.13 kHz or 42.8 MHz.");
       }
     };
   }
 
   // ==========================================
-  // MINI-GAME 4: «АСАР» COOPERATIVE PRESSURE EQUALIZER
+  // MINI-GAME 4: «ASAR» COOPERATIVE PRESSURE EQUALIZER
   // ==========================================
   renderAsarSync(container) {
     const aiTeammate = this.game.crew.find(c => c.id !== this.game.selectedCharacterId) || window.CREW_MEMBERS[1];
 
     container.innerHTML = `
       <div class="task-header">
-        <div class="task-title-badge">ҚАЗАҚ ДӘСТҮРІ / КОМАНДАЛЫҚ «АСАР» МЕХАНИКАСЫ</div>
-        <h2 class="task-title">Синхронная продувка атмосферного шлюза</h2>
-        <p class="task-desc">Традиция Асар: совместный труд для спасения общего дома. Удерживайте клапан в зелёной зоне точно в унисон с вашим напарником <strong>${aiTeammate.name}</strong>!</p>
+        <div class="task-title-badge">KAZAKH TRADITION / COOPERATIVE 'ASAR' MECHANIC</div>
+        <h2 class="task-title">Synchronized Atmospheric Airlock Equalization</h2>
+        <p class="task-desc">The tradition of Asar: communal mutual aid to protect our shared home. Keep your valve in the green calibration zone in perfect synchronization with your teammate <strong>${aiTeammate.name}</strong>!</p>
       </div>
 
       <div class="asar-arena">
         <div class="crew-sync-col">
-          <div class="crew-hud-label">СІЗ (ВЫ): ${this.game.character.name}</div>
+          <div class="crew-hud-label">YOU: ${this.game.character.name}</div>
           <div class="valve-gauge">
             <div class="gauge-target-zone"></div>
             <div id="playerValveNeedle" class="gauge-needle"></div>
           </div>
-          <button id="pressValveBtn" class="btn btn-primary valve-btn">КЛАПАНДЫ БАСЫП ТҰРУ (ДЕРЖАТЬ)</button>
+          <button id="pressValveBtn" class="btn btn-primary valve-btn">HOLD VALVE DOWN (PRESS)</button>
         </div>
 
         <div class="sync-center-display">
           <div class="asar-emblem">🤝</div>
-          <div id="asarCountdown" class="countdown-large">ДАЙЫНДЫҚ...</div>
-          <div id="asarProgress" class="asar-progress-text">СИНХРОН: 0%</div>
+          <div id="asarCountdown" class="countdown-large">PREPARING...</div>
+          <div id="asarProgress" class="asar-progress-text">SYNC: 0%</div>
         </div>
 
         <div class="crew-sync-col">
-          <div class="crew-hud-label">НАПАРНИК: ${aiTeammate.name}</div>
+          <div class="crew-hud-label">TEAMMATE: ${aiTeammate.name}</div>
           <div class="valve-gauge">
             <div class="gauge-target-zone"></div>
             <div id="teammateValveNeedle" class="gauge-needle" style="top: 45%;"></div>
           </div>
-          <div class="teammate-status-box" id="teammateStatus">«Дайынмын! 3-ке дейін санағанда бірге басамыз!»</div>
+          <div class="teammate-status-box" id="teammateStatus">«Ready! On my count of three, we press and hold together!»</div>
         </div>
       </div>
 
       <div class="task-actions">
-        <button id="cancelTaskBtn" class="btn btn-ghost">ЖАБУ (ОТМЕНА)</button>
+        <button id="cancelTaskBtn" class="btn btn-ghost">CLOSE (CANCEL)</button>
       </div>
     `;
 
@@ -490,7 +488,7 @@ class MiniGameManager {
         window.soundEngine.playClick();
         count--;
       } else {
-        countdownEl.innerText = "БАС! (СИНХРОН!)";
+        countdownEl.innerText = "PRESS! (SYNC!)";
         countdownEl.style.color = "#00ff88";
         window.soundEngine.playAsarSync();
         clearInterval(countTimer);
@@ -512,7 +510,7 @@ class MiniGameManager {
         teammateTarget = 42 + Math.sin(Date.now() / 300) * 8;
         teammateNeedle.style.top = `${teammateTarget}%`;
 
-        // Check if both in green zone (30% to 55%)
+        // Check if both in green zone (30% to 58%)
         const playerInZone = playerPos >= 30 && playerPos <= 58;
         const teammateInZone = teammateTarget >= 30 && teammateTarget <= 58;
 
@@ -524,14 +522,14 @@ class MiniGameManager {
           progressEl.style.color = '#ffd166';
         }
 
-        progressEl.innerText = `СИНХРОН: ${Math.min(100, Math.round(syncPercent))}%`;
+        progressEl.innerText = `SYNC: ${Math.min(100, Math.round(syncPercent))}%`;
 
         if (syncPercent >= 100) {
           clearInterval(this.activeInterval);
           window.soundEngine.playSuccess();
           this.game.completeTask('asar_sync', {
             resourceDelta: { oxygen: +20, morale: +30, materials: +15 },
-            desc: "АСАР сработал безупречно! Шлюз продут совместными усилиями экипажа (+20 O2, +30 Мораль, +15 Материалы)!"
+            desc: "ASAR executed flawlessly! Airlock stabilized by united crew effort (+20% O2, +30% Morale, +15 Materials)!"
           });
           this.closeModal();
         }
@@ -545,22 +543,22 @@ class MiniGameManager {
   renderSurfaceRover(container) {
     container.innerHTML = `
       <div class="task-header">
-        <div class="task-title-badge">МАРС БЕТІ / «АҚ СҰҢҚАР-РОVER» БАРЛАУ</div>
-        <h2 class="task-title">Разведка поверхности и сбор марсианских минералов</h2>
-        <p class="task-desc">Управляйте лучами георадара на равнине Ацидалия. Кликайте на сигнатуры минералов (Материалы, Водный лёд, Артефакты). Остерегайтесь провалов грунта!</p>
+        <div class="task-title-badge">MARTIAN SURFACE / 'AQ SUNGQAR' ROVER RECON (EVA)</div>
+        <h2 class="task-title">Surface Mineral Prospecting & Artifact Survey</h2>
+        <p class="task-desc">Direct the ground-penetrating radar across Acidalia Planitia. Click signatures of minerals (Titanium, Water Ice, Artifacts). Beware of ground cave-ins!</p>
       </div>
 
       <div class="rover-radar-display">
         <canvas id="radarCanvas" width="600" height="260" class="hud-canvas"></canvas>
         <div class="rover-stats-hud">
-          <span id="roverO2Tag">СКАНЕР ЗАРЯДЫ: 100%</span>
-          <span id="collectedMinTag" style="color:#00ff88;">ЖИНАЛҒАН: 0/4 КРИСТАЛЛ</span>
+          <span id="roverO2Tag">RADAR CHARGE: 100%</span>
+          <span id="collectedMinTag" style="color:#00ff88;">COLLECTED: 0/4 SAMPLES</span>
         </div>
       </div>
 
       <div class="task-actions">
-        <button id="finishEvaBtn" class="btn btn-primary">МАТЕРИАЛДАРДЫ БАЗАҒА ТАСУ</button>
-        <button id="cancelTaskBtn" class="btn btn-ghost">ЖАБУ (ОТМЕНА)</button>
+        <button id="finishEvaBtn" class="btn btn-primary">HAUL SAMPLES TO BASE</button>
+        <button id="cancelTaskBtn" class="btn btn-ghost">CLOSE (CANCEL)</button>
       </div>
     `;
 
@@ -574,11 +572,11 @@ class MiniGameManager {
     let energy = 100;
     let collected = 0;
     const items = [
-      { x: 120, y: 80, type: 'mineral', collected: false, name: "Изотоп Fe-56" },
-      { x: 450, y: 60, type: 'ice', collected: false, name: "Су мұзы (Лед)" },
-      { x: 300, y: 180, type: 'petroglyph', collected: false, name: "Тас жазуы (Петроглиф)" },
-      { x: 500, y: 200, type: 'mineral', collected: false, name: "Титановый базальт" },
-      { x: 220, y: 130, type: 'hazard', name: "Тұңғиық (Провал)" }
+      { x: 120, y: 80, type: 'mineral', collected: false, name: "Fe-56 Isotope" },
+      { x: 450, y: 60, type: 'ice', collected: false, name: "Sub-surface Ice" },
+      { x: 300, y: 180, type: 'petroglyph', collected: false, name: "Ancient Petroglyph" },
+      { x: 500, y: 200, type: 'mineral', collected: false, name: "Titanium Basalt" },
+      { x: 220, y: 130, type: 'hazard', name: "Fault Abyss (Hazard)" }
     ];
 
     let radarAngle = 0;
@@ -595,15 +593,15 @@ class MiniGameManager {
           if (it.type === 'hazard') {
             window.soundEngine.playError();
             energy -= 25;
-            alert("Внимание! Обвал марсианской породы! Потеряна энергия зонда (-25%).");
+            alert("Warning! Regolith cave-in! Probe battery power drained (-25%).");
           } else {
             it.collected = true;
             collected++;
             window.soundEngine.playClick();
-            document.getElementById('collectedMinTag').innerText = `ЖИНАЛҒАН: ${collected}/4 ОБЪЕКТ`;
+            document.getElementById('collectedMinTag').innerText = `COLLECTED: ${collected}/4 OBJECTS`;
             if (it.type === 'petroglyph') {
               this.game.secretEggProgress++;
-              alert("Найдена древняя плита с гравировкой орнамента Қошқар Мүйіз! Зафиксировано биополе.");
+              alert("Discovered an ancient basalt slab etched with the nomadic Horned Ram petroglyph! Resonance field logged.");
             }
           }
         }
@@ -666,12 +664,12 @@ class MiniGameManager {
         window.soundEngine.playSuccess();
         this.game.completeTask('surface_rover', {
           resourceDelta: { materials: +35, water: +20, fuel: -5 },
-          desc: `Экспедиция завершена! Собрано ${collected} марсианских образца (+35 Материалы, +20 Вода).`
+          desc: `Surface sortie concluded! Recovered ${collected} Martian samples (+35 Materials, +20 Water).`
         });
         this.closeModal();
       } else {
         window.soundEngine.playError();
-        alert("Соберите минимум 2 образца минералов, чтобы оправдать выход на поверхность!");
+        alert("Collect at least 2 mineral samples before returning to justify suit oxygen expenditure!");
       }
     };
   }
@@ -682,9 +680,9 @@ class MiniGameManager {
   renderGalleyRations(container) {
     container.innerHTML = `
       <div class="task-header">
-        <div class="task-title-badge">АСХАНА ЖӘНЕ БИО-СИНТЕЗ / ҚАЗАҚ ҰЛТТЫҚ ҒАРЫШ ПАЕКТЕРІ</div>
-        <h2 class="task-title">Приготовление традиционных космических пайков</h2>
-        <p class="task-desc">Используйте биореакторы Даны для синтеза питательных блюд Казахстана. Распределите пайки среди экипажа для поднятия боевого духа и сил.</p>
+        <div class="task-title-badge">GALLEY & BIO-SYNTHESIS / NATIONAL SPACE CUISINE</div>
+        <h2 class="task-title">Synthesize Traditional Space Rations</h2>
+        <p class="task-desc">Use Dana's bioreactors to synthesize nutrient-rich space cuisine of Kazakhstan. Distribute rations to restore crew stamina, health, and spirit.</p>
       </div>
 
       <div class="rations-synthesis-grid">
@@ -699,13 +697,13 @@ class MiniGameManager {
               </div>
               <div class="ration-lore">${r.lore}</div>
             </div>
-            <button class="btn btn-sm btn-primary cook-btn" data-id="${r.id}">СИНТЕЗДЕУ</button>
+            <button class="btn btn-sm btn-primary cook-btn" data-id="${r.id}">SYNTHESIZE</button>
           </div>
         `).join('')}
       </div>
 
       <div class="task-actions">
-        <button id="cancelTaskBtn" class="btn btn-ghost">ЖАБУ (ОТМЕНА)</button>
+        <button id="cancelTaskBtn" class="btn btn-ghost">CLOSE (CANCEL)</button>
       </div>
     `;
 
@@ -731,7 +729,7 @@ class MiniGameManager {
 
         this.game.completeTask('galley_rations', {
           resourceDelta: bonuses,
-          desc: `Приготовлен «${ration.name}»! Экипаж отведал родной кухни: силы и дух команды восстановлены (+30 Еда, +25 Мораль)!`
+          desc: `Prepared '${ration.name}'! Crew enjoyed homeland delicacies: stamina and morale restored (+30 Food, +25 Morale)!`
         });
         this.closeModal();
       };
